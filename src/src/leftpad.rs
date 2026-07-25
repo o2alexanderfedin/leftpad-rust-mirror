@@ -12,8 +12,13 @@ use super::*;
 ///
 ///Returns the length of the output string. If less than `dest_sz`, the output
 ///has not bene truncated.
-pub(crate) extern "C" fn leftpad(str: *const i8, mut padding: *const i8,
-    min_len: u64, dest: *mut i8, dest_sz: u64) -> u64 {
+pub(crate) extern "C" fn leftpad(
+    str: *const i8,
+    mut padding: *const i8,
+    min_len: u64,
+    dest: *mut i8,
+    dest_sz: u64,
+) -> u64 {
     let mut i: u64 = 0 as u64;
     let mut str_len: u64 = 0 as u64;
     let mut dest_len: u64 = 0 as u64;
@@ -26,35 +31,38 @@ pub(crate) extern "C" fn leftpad(str: *const i8, mut padding: *const i8,
             __t
         };
     }
-    if (padding).is_null() as i32 != 0 ||
-            (unsafe { *padding.offset(0 as isize) } == 0) as i32 != 0 {
+    if (padding).is_null() as i32 != 0 || (unsafe { *padding.offset(0 as isize) } == 0) as i32 != 0
+    {
         padding = c" ".as_ptr() as *mut i8 as *const i8;
     }
-    if str_len < min_len { npad = min_len.wrapping_sub(str_len); }
+    if str_len < min_len {
+        npad = min_len.wrapping_sub(str_len);
+    }
     if (dest).is_null() as i32 != 0 || (dest_sz == 0) as i32 != 0 {
         return str_len.wrapping_add(npad);
     }
     while dest_len < npad && dest_len < dest_sz.wrapping_sub(1 as u64) {
         if ({
-                            let __v =
-                                unsafe {
-                                        *padding.add({
-                                                        let __p = &mut i;
-                                                        let __t = *__p;
-                                                        *__p = (*__p).wrapping_add(1);
-                                                        __t
-                                                    } as usize)
-                                    } as i8;
-                            unsafe {
-                                *dest.add({
-                                                    let __p = &mut dest_len;
-                                                    let __t = *__p;
-                                                    *__p = (*__p).wrapping_add(1);
-                                                    __t
-                                                } as usize) = __v
-                            };
-                            __v
-                        } == 0) as i32 != 0 {
+            let __v = unsafe {
+                *padding.add({
+                    let __p = &mut i;
+                    let __t = *__p;
+                    *__p = (*__p).wrapping_add(1);
+                    __t
+                } as usize)
+            } as i8;
+            unsafe {
+                *dest.add({
+                    let __p = &mut dest_len;
+                    let __t = *__p;
+                    *__p = (*__p).wrapping_add(1);
+                    __t
+                } as usize) = __v
+            };
+            __v
+        } == 0) as i32
+            != 0
+        {
             unsafe {
                 *dest.add(dest_len.wrapping_sub(1 as u64) as usize) =
                     unsafe { *padding.offset(0 as isize) } as i8
@@ -71,11 +79,11 @@ pub(crate) extern "C" fn leftpad(str: *const i8, mut padding: *const i8,
             '__c2: loop {
                 unsafe {
                     *dest.add({
-                                        let __p = &mut dest_len;
-                                        let __t = *__p;
-                                        *__p = (*__p).wrapping_add(1);
-                                        __t
-                                    } as usize) = unsafe { *str.add(i as usize) } as i8
+                        let __p = &mut dest_len;
+                        let __t = *__p;
+                        *__p = (*__p).wrapping_add(1);
+                        __t
+                    } as usize) = unsafe { *str.add(i as usize) } as i8
                 };
                 break '__c2;
             }
