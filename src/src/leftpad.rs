@@ -25,10 +25,9 @@ pub(crate) extern "C" fn leftpad(
     let mut npad: u64 = 0 as u64;
     while !(str).is_null() && unsafe { *str.add(str_len as usize) } != 0 {
         {
-            let __p = &mut str_len;
-            let __t = *__p;
-            *__p = (*__p).wrapping_add(1);
-            __t
+            let __old = str_len;
+            str_len = str_len.wrapping_add(1);
+            __old
         };
     }
     if (padding).is_null() as i32 != 0 || (unsafe { *padding.offset(0 as isize) } == 0) as i32 != 0
@@ -45,18 +44,16 @@ pub(crate) extern "C" fn leftpad(
         if ({
             let __v = unsafe {
                 *padding.add({
-                    let __p = &mut i;
-                    let __t = *__p;
-                    *__p = (*__p).wrapping_add(1);
-                    __t
+                    let __old = i;
+                    i = i.wrapping_add(1);
+                    __old
                 } as usize)
             } as i8;
             unsafe {
                 *dest.add({
-                    let __p = &mut dest_len;
-                    let __t = *__p;
-                    *__p = (*__p).wrapping_add(1);
-                    __t
+                    let __old = dest_len;
+                    dest_len = dest_len.wrapping_add(1);
+                    __old
                 } as usize) = __v
             };
             __v
@@ -79,20 +76,14 @@ pub(crate) extern "C" fn leftpad(
             '__c2: loop {
                 unsafe {
                     *dest.add({
-                        let __p = &mut dest_len;
-                        let __t = *__p;
-                        *__p = (*__p).wrapping_add(1);
-                        __t
+                        let __old = dest_len;
+                        dest_len = dest_len.wrapping_add(1);
+                        __old
                     } as usize) = unsafe { *str.add(i as usize) } as i8
                 };
                 break '__c2;
             }
-            {
-                let __p = &mut i;
-                let __t = *__p;
-                *__p = (*__p).wrapping_add(1);
-                __t
-            };
+            i = i.wrapping_add(1);
         }
     }
     unsafe { *dest.add(dest_len as usize) = '\u{0}' as i32 as i8 };
